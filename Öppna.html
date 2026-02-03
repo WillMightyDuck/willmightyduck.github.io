@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vill du bli min valentine?</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #fff0f3;
+            overflow: hidden;
+            transition: background-color 0.8s ease;
+        }
+
+        h1 {
+            color: #ff4d6d;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-align: center;
+            z-index: 20;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+        }
+
+        button {
+            padding: 15px 35px;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        #yes-btn {
+            background-color: #ff4d6d;
+            color: white;
+            z-index: 100; /* Stays on top */
+        }
+
+        #no-btn {
+            background-color: #808080;
+            color: white;
+            position: relative;
+        }
+
+        /* The Heart Animation */
+        .heart {
+            position: fixed;
+            bottom: -10%;
+            font-size: 2rem;
+            animation: moveUp 4s linear forwards;
+            user-select: none;
+            z-index: 50;
+        }
+
+        @keyframes moveUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1 id="question">Vill du bli min valentine?</h1>
+
+    <div class="container" id="main-container">
+        <button id="yes-btn" onclick="celebrate()">Ja</button>
+        <button id="no-btn" onmouseover="moveNo()" onclick="moveNo()">Nej</button>
+    </div>
+
+    <script>
+        let yesScale = 1;
+
+        function moveNo() {
+            const noBtn = document.getElementById('no-btn');
+            const yesBtn = document.getElementById('yes-btn');
+            
+            // 1. Make the "Ja" button bigger
+            yesScale += 0.3;
+            yesBtn.style.transform = `scale(${yesScale})`;
+
+            // 2. Teleport the "Nej" button
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+        }
+
+        function celebrate() {
+            const question = document.getElementById('question');
+            const container = document.getElementById('main-container');
+            
+            question.innerText = "Ingen tvekan! Jag visste det! ❤️";
+            container.style.display = 'none';
+            document.body.style.backgroundColor = '#ffccd5';
+
+            // Create Heart Explosion
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    // Randomize heart types
+                    const heartTypes = ['❤️', '💖', '💝', '💕', '💗'];
+                    heart.innerHTML = heartTypes[Math.floor(Math.random() * heartTypes.length)];
+                    
+                    // Randomize position and speed
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                    
+                    document.body.appendChild(heart);
+                    
+                    // Remove heart from DOM after animation finishes
+                    setTimeout(() => heart.remove(), 4000);
+                }, i * 50); // Staggered start
+            }
+        }
+    </script>
+</body>
+</html>
